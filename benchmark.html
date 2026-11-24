@@ -33,7 +33,7 @@ header p{margin-top:12px;color:var(--muted);max-width:72ch}
 .camera{background:#e7ece9;min-width:0;display:grid;grid-template-rows:1fr auto}
 .stage{min-height:320px;display:grid;place-items:center;background:radial-gradient(ellipse at center,#fbfcfa,#e3e9e5 90%);padding:16px}
 .stage img{display:block;max-width:100%;max-height:410px;object-fit:contain;border-radius:6px}
-.stage img[src*="/level-iii-task-path/"]{width:min(100%,388px)}
+.stage img[src*="/scene-zones/"]{width:min(100%,388px)}
 .camera-caption{justify-content:space-between;gap:12px;min-height:50px;background:#edf1ee;border-top:1px solid var(--line);padding:8px 16px;color:var(--muted);font-size:13px}
 .camera-caption button{background:#fff;border:1px solid #bacac5;border-radius:6px;padding:5px 10px;font-size:13px}
 .side{padding:clamp(18px,3vw,32px);border-left:1px solid var(--line)}
@@ -52,6 +52,12 @@ footer{margin:22px 0 30px;color:var(--muted);font-size:14px}
 @media(max-width:760px){.explorer{grid-template-columns:1fr}.side{border-left:0;border-top:1px solid var(--line)}.stage{min-height:0;padding:10px}.stage img{max-height:300px}.switch button{padding:6px 10px}.bar .wrap{min-height:50px}.links{gap:12px}.suite-row{gap:9px}}
 @media(max-width:390px){.identity{font-size:14px}.links{font-size:12px;gap:8px}.wrap{padding:0 12px}}
 
+.speed-control{margin:16px 0 4px;max-width:360px}
+.speed-heading,.speed-ticks{display:flex;align-items:center;justify-content:space-between}
+.speed-heading{font-size:14px}.speed-heading output{font:600 14px var(--mono);color:var(--accent)}
+#speed{display:block;width:100%;margin:6px 0 0;min-height:26px;accent-color:var(--accent);cursor:pointer}
+.speed-ticks{margin:0 2px;color:var(--muted);font:12px var(--mono)}
+.speed-ticks span{width:16px;text-align:center}
 </style>
 </head>
 <body>
@@ -66,16 +72,19 @@ footer{margin:22px 0 30px;color:var(--muted);font-size:14px}
 </div>
 <section class="explorer" aria-label="Task explorer">
 <figure class="camera">
-<div class="stage"><img id="scene" src="benchmark_figs/level-iii-task-path/spatial-0-10.webp" alt="Spatial task preview"></div>
-<figcaption class="camera-caption"><span id="caption">Yellow dashes trace the task. Cyan traces the obstacle.</span><button id="motion" type="button">Show crossing frame</button></figcaption>
+<div class="stage"><img id="scene" alt="Spatial task preview"></div>
+<figcaption class="camera-caption"><span id="caption">Yellow dashes trace the task. The ring marks a crossing.</span><button id="motion" type="button">Show crossing frame</button></figcaption>
 </figure>
 <div class="side">
 <div class="view-head" id="selection">Spatial / Level III</div>
 <h2 id="level-name">Moving obstacle</h2>
 <p id="description" class="trial">The arm holds its start pose while the obstacle crosses the estimated task route. The yellow ring marks the 3D crossing.</p>
 <p class="trial" id="route" style="margin-top:10px"></p>
-<div id="event-row" class="control-row" hidden><span>Event</span><div id="events" class="switch" role="group" aria-label="Intrusion type"><button data-key="object" aria-pressed="true">Object crosses</button><button data-key="hand" aria-pressed="false">Hand places cup</button></div></div>
-<div id="speed-row" class="control-row"><span id="speed-label">Obstacle speed</span><div class="switch" id="speeds" role="group" aria-label="Obstacle speed"><button data-key="10" aria-pressed="true">10 cm/s</button><button data-key="20" aria-pressed="false">20 cm/s</button></div></div>
+<div id="speed-row" class="speed-control">
+<div class="speed-heading"><label for="speed">Obstacle speed</label><output for="speed" id="speed-value">20 cm/s</output></div>
+<input id="speed" type="range" min="0" max="4" step="1" value="2" aria-valuetext="20 cm/s">
+<div class="speed-ticks" aria-hidden="true"><span>5</span><span>10</span><span>20</span><span>40</span><span>80</span></div>
+</div>
 <h3 class="task-label">Select a task</h3>
 <div id="tasks" class="tasks" role="group" aria-label="Tasks"></div>
 </div>
@@ -88,59 +97,63 @@ footer{margin:22px 0 30px;color:var(--muted);font-size:14px}
     "I": [
       {
         "name": "Pick up the black bowl between the plate and the ramekin and place it on the plate",
-        "path": "benchmark_figs/spatial/I/pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate_I.png"
+        "path": "benchmark_figs/scene-zones/I-spatial-0.webp"
       },
       {
         "name": "Pick up the black bowl on the ramekin and place it on the plate",
-        "path": "benchmark_figs/spatial/I/pick_up_the_black_bowl_on_the_ramekin_and_place_it_on_the_plate_I.png"
+        "path": "benchmark_figs/scene-zones/I-spatial-1.webp"
       },
       {
         "name": "Pick up the black bowl on the stove and place it on the plate",
-        "path": "benchmark_figs/spatial/I/pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate_I.png"
+        "path": "benchmark_figs/scene-zones/I-spatial-2.webp"
       },
       {
         "name": "Pick up the black bowl on the wooden cabinet and place it on the plate",
-        "path": "benchmark_figs/spatial/I/pick_up_the_black_bowl_on_the_wooden_cabinet_and_place_it_on_the_plate_I.png"
+        "path": "benchmark_figs/scene-zones/I-spatial-3.webp"
       }
     ],
     "II": [
       {
         "name": "Pick up the black bowl between the plate and the ramekin and place it on the plate",
-        "path": "benchmark_figs/spatial/II/pick_up_the_black_bowl_between_the_plate_and_the_ramekin_and_place_it_on_the_plate_II.png"
+        "path": "benchmark_figs/scene-zones/II-spatial-0.webp"
       },
       {
         "name": "Pick up the black bowl on the ramekin and place it on the plate",
-        "path": "benchmark_figs/spatial/II/pick_up_the_black_bowl_on_the_ramekin_and_place_it_on_the_plate_II.png"
+        "path": "benchmark_figs/scene-zones/II-spatial-1.webp"
       },
       {
         "name": "Pick up the black bowl on the stove and place it on the plate",
-        "path": "benchmark_figs/spatial/II/pick_up_the_black_bowl_on_the_stove_and_place_it_on_the_plate_II.png"
+        "path": "benchmark_figs/scene-zones/II-spatial-2.webp"
       },
       {
         "name": "Pick up the black bowl on the wooden cabinet and place it on the plate",
-        "path": "benchmark_figs/spatial/II/pick_up_the_black_bowl_on_the_wooden_cabinet_and_place_it_on_the_plate_II.png"
+        "path": "benchmark_figs/scene-zones/II-spatial-3.webp"
       }
     ],
     "III": [
       {
         "name": "Pick up the black bowl between the plate and the ramekin and place it on the plate",
-        "path": "benchmark_figs/level-iii-task-path/spatial-0",
-        "route": "Gripper → Bowl → Plate"
+        "path": "benchmark_figs/scene-zones/spatial-0",
+        "route": "Gripper → Bowl → Plate",
+        "description": "A hand carries a mug across the reach path, sets it beside the plate and withdraws."
       },
       {
         "name": "Pick up the black bowl on the ramekin and place it on the plate",
-        "path": "benchmark_figs/level-iii-task-path/spatial-1",
-        "route": "Gripper → Bowl → Plate"
+        "path": "benchmark_figs/scene-zones/spatial-1",
+        "route": "Gripper → Bowl → Plate",
+        "description": "The obstacle crosses the estimated task route while the arm holds position."
       },
       {
         "name": "Pick up the black bowl on the stove and place it on the plate",
-        "path": "benchmark_figs/level-iii-task-path/spatial-2",
-        "route": "Gripper → Bowl → Plate"
+        "path": "benchmark_figs/scene-zones/spatial-2",
+        "route": "Gripper → Bowl → Plate",
+        "description": "The obstacle crosses the estimated task route while the arm holds position."
       },
       {
         "name": "Pick up the black bowl on the wooden cabinet and place it on the plate",
-        "path": "benchmark_figs/level-iii-task-path/spatial-3",
-        "route": "Gripper → Bowl → Plate"
+        "path": "benchmark_figs/scene-zones/spatial-3",
+        "route": "Gripper → Bowl → Plate",
+        "description": "A hand carries a mug across the reach path, sets it beside the plate and withdraws."
       }
     ]
   },
@@ -148,59 +161,63 @@ footer{margin:22px 0 30px;color:var(--muted);font-size:14px}
     "I": [
       {
         "name": "Put the bowl on the plate",
-        "path": "benchmark_figs/goal/I/put_the_bowl_on_the_plate_I.png"
+        "path": "benchmark_figs/scene-zones/I-goal-0.webp"
       },
       {
         "name": "Put the bowl on the stove",
-        "path": "benchmark_figs/goal/I/put_the_bowl_on_the_stove_I.png"
+        "path": "benchmark_figs/scene-zones/I-goal-2.webp"
       },
       {
         "name": "Put the bowl on top of the cabinet",
-        "path": "benchmark_figs/goal/I/put_the_bowl_on_top_of_the_cabinet_I.png"
+        "path": "benchmark_figs/scene-zones/I-goal-1.webp"
       },
       {
         "name": "Open the top drawer and put the bowl inside",
-        "path": "benchmark_figs/goal/I/open_the_top_drawer_and_put_the_bowl_inside_I.png"
+        "path": "benchmark_figs/scene-zones/I-goal-3.webp"
       }
     ],
     "II": [
       {
         "name": "Put the bowl on the plate",
-        "path": "benchmark_figs/goal/II/put_the_bowl_on_the_plate_II.png"
+        "path": "benchmark_figs/scene-zones/II-goal-0.webp"
       },
       {
         "name": "Put the bowl on the stove",
-        "path": "benchmark_figs/goal/II/put_the_bowl_on_the_stove_II.png"
+        "path": "benchmark_figs/scene-zones/II-goal-2.webp"
       },
       {
         "name": "Put the bowl on top of the cabinet",
-        "path": "benchmark_figs/goal/II/put_the_bowl_on_top_of_the_cabinet_II.png"
+        "path": "benchmark_figs/scene-zones/II-goal-1.webp"
       },
       {
         "name": "Put the cream cheese in the bowl",
-        "path": "benchmark_figs/goal/II/put_the_cream_cheese_in_the_bowl_II.png"
+        "path": "benchmark_figs/scene-zones/II-goal-3.webp"
       }
     ],
     "III": [
       {
         "name": "Put the bowl on the plate",
-        "path": "benchmark_figs/level-iii-task-path/goal-0",
-        "route": "Gripper → Bowl → Lift and carry → Plate"
+        "path": "benchmark_figs/scene-zones/goal-0",
+        "route": "Gripper → Bowl → Lift and carry → Plate",
+        "description": "The obstacle crosses the estimated task route while the arm holds position."
       },
       {
         "name": "Put the bowl on the stove",
-        "path": "benchmark_figs/level-iii-task-path/goal-2",
-        "route": "Gripper → Bowl → Stove"
+        "path": "benchmark_figs/scene-zones/goal-2",
+        "route": "Gripper → Bowl → Stove",
+        "description": "The obstacle crosses the estimated task route while the arm holds position."
       },
       {
         "name": "Put the bowl on top of the cabinet",
-        "path": "benchmark_figs/level-iii-task-path/goal-1",
-        "route": "Gripper → Bowl → Lift and carry → Cabinet top"
+        "path": "benchmark_figs/scene-zones/goal-1",
+        "route": "Gripper → Bowl → Lift and carry → Cabinet top",
+        "description": "The obstacle crosses the estimated task route while the arm holds position."
       },
       {
         "name": "Open the top drawer and put the bowl inside",
-        "path": "benchmark_figs/level-iii-task-path/goal-3",
-        "route": "Gripper → Drawer handle → Pull open → Bowl → Open drawer"
+        "path": "benchmark_figs/scene-zones/goal-3",
+        "route": "Gripper → Drawer handle → Pull open → Bowl → Open drawer",
+        "description": "The obstacle crosses the estimated task route while the arm holds position."
       }
     ]
   },
@@ -208,59 +225,63 @@ footer{margin:22px 0 30px;color:var(--muted);font-size:14px}
     "I": [
       {
         "name": "Pick up the bbq sauce and place it in the basket",
-        "path": "benchmark_figs/object/I/pick_up_the_bbq_sauce_and_place_it_in_the_basket_I.png"
+        "path": "benchmark_figs/scene-zones/I-object-3.webp"
       },
       {
         "name": "Pick up the chocolate pudding and place it in the basket",
-        "path": "benchmark_figs/object/I/pick_up_the_chocolate_pudding_and_place_it_in_the_basket_I.png"
+        "path": "benchmark_figs/scene-zones/I-object-1.webp"
       },
       {
         "name": "Pick up the milk and place it in the basket",
-        "path": "benchmark_figs/object/I/pick_up_the_milk_and_place_it_in_the_basket_I.png"
+        "path": "benchmark_figs/scene-zones/I-object-2.webp"
       },
       {
         "name": "Pick up the orange juice and place it in the basket",
-        "path": "benchmark_figs/object/I/pick_up_the_orange_juice_and_place_it_in_the_basket_I.png"
+        "path": "benchmark_figs/scene-zones/I-object-0.webp"
       }
     ],
     "II": [
       {
         "name": "Pick up the bbq sauce and place it in the basket",
-        "path": "benchmark_figs/object/II/pick_up_the_bbq_sauce_and_place_it_in_the_basket_II.png"
+        "path": "benchmark_figs/scene-zones/II-object-3.webp"
       },
       {
         "name": "Pick up the chocolate pudding and place it in the basket",
-        "path": "benchmark_figs/object/II/pick_up_the_chocolate_pudding_and_place_it_in_the_basket_II.png"
+        "path": "benchmark_figs/scene-zones/II-object-1.webp"
       },
       {
         "name": "Pick up the milk and place it in the basket",
-        "path": "benchmark_figs/object/II/pick_up_the_milk_and_place_it_in_the_basket_II.png"
+        "path": "benchmark_figs/scene-zones/II-object-2.webp"
       },
       {
         "name": "Pick up the orange juice and place it in the basket",
-        "path": "benchmark_figs/object/II/pick_up_the_orange_juice_and_place_it_in_the_basket_II.png"
+        "path": "benchmark_figs/scene-zones/II-object-0.webp"
       }
     ],
     "III": [
       {
         "name": "Pick up the bbq sauce and place it in the basket",
-        "path": "benchmark_figs/level-iii-task-path/object-3",
-        "route": "Gripper → Bbq sauce → Basket"
+        "path": "benchmark_figs/scene-zones/object-3",
+        "route": "Gripper → Bbq sauce → Basket",
+        "description": "The obstacle crosses the estimated task route while the arm holds position."
       },
       {
         "name": "Pick up the chocolate pudding and place it in the basket",
-        "path": "benchmark_figs/level-iii-task-path/object-1",
-        "route": "Gripper → Chocolate pudding → Basket"
+        "path": "benchmark_figs/scene-zones/object-1",
+        "route": "Gripper → Chocolate pudding → Basket",
+        "description": "The obstacle crosses the estimated task route while the arm holds position."
       },
       {
         "name": "Pick up the milk and place it in the basket",
-        "path": "benchmark_figs/level-iii-task-path/object-2",
-        "route": "Gripper → Milk → Basket"
+        "path": "benchmark_figs/scene-zones/object-2",
+        "route": "Gripper → Milk → Basket",
+        "description": "The obstacle crosses the estimated task route while the arm holds position."
       },
       {
         "name": "Pick up the orange juice and place it in the basket",
-        "path": "benchmark_figs/level-iii-task-path/object-0",
-        "route": "Gripper → Orange juice → Basket"
+        "path": "benchmark_figs/scene-zones/object-0",
+        "route": "Gripper → Orange juice → Basket",
+        "description": "The obstacle crosses the estimated task route while the arm holds position."
       }
     ]
   },
@@ -268,59 +289,63 @@ footer{margin:22px 0 30px;color:var(--muted);font-size:14px}
     "I": [
       {
         "name": "Put both the alphabet soup and the cream cheese box in the basket",
-        "path": "benchmark_figs/long/I/put_both_the_alphabet_soup_and_the_cream_cheese_box_in_the_basket_I.png"
+        "path": "benchmark_figs/scene-zones/I-long-0.webp"
       },
       {
         "name": "Put both the alphabet soup and the tomato sauce in the basket",
-        "path": "benchmark_figs/long/I/put_both_the_alphabet_soup_and_the_tomato_sauce_in_the_basket_I.png"
+        "path": "benchmark_figs/scene-zones/I-long-1.webp"
       },
       {
         "name": "Put the white mug on the left plate and put the yellow and white mug on the right plate",
-        "path": "benchmark_figs/long/I/put_the_white_mug_on_the_left_plate_and_put_the_yellow_and_white_mug_on_the_right_plate_I.png"
+        "path": "benchmark_figs/scene-zones/I-long-2.webp"
       },
       {
         "name": "Put the white mug on the plate and put the chocolate pudding to the right of the plate",
-        "path": "benchmark_figs/long/I/put_the_white_mug_on_the_plate_and_put_the_chocolate_pudding_to_the_right_of_the_plate_I.png"
+        "path": "benchmark_figs/scene-zones/I-long-3.webp"
       }
     ],
     "II": [
       {
         "name": "Put both the alphabet soup and the cream cheese box in the basket",
-        "path": "benchmark_figs/long/II/put_both_the_alphabet_soup_and_the_cream_cheese_box_in_the_basket_II.png"
+        "path": "benchmark_figs/scene-zones/II-long-0.webp"
       },
       {
         "name": "Put both the alphabet soup and the tomato sauce in the basket",
-        "path": "benchmark_figs/long/II/put_both_the_alphabet_soup_and_the_tomato_sauce_in_the_basket_II.png"
+        "path": "benchmark_figs/scene-zones/II-long-1.webp"
       },
       {
         "name": "Put the white mug on the left plate and put the yellow and white mug on the right plate",
-        "path": "benchmark_figs/long/II/put_the_white_mug_on_the_left_plate_and_put_the_yellow_and_white_mug_on_the_right_plate_II.png"
+        "path": "benchmark_figs/scene-zones/II-long-2.webp"
       },
       {
         "name": "Put the white mug on the plate and put the chocolate pudding to the right of the plate",
-        "path": "benchmark_figs/long/II/put_the_white_mug_on_the_plate_and_put_the_chocolate_pudding_to_the_right_of_the_plate_II.png"
+        "path": "benchmark_figs/scene-zones/II-long-3.webp"
       }
     ],
     "III": [
       {
         "name": "Put both the alphabet soup and the cream cheese box in the basket",
-        "path": "benchmark_figs/level-iii-task-path/long-0",
-        "route": "Gripper → Alphabet soup → Basket → Cream cheese → Basket"
+        "path": "benchmark_figs/scene-zones/long-0",
+        "route": "Gripper → Alphabet soup → Basket → Cream cheese → Basket",
+        "description": "The obstacle crosses the estimated task route while the arm holds position."
       },
       {
         "name": "Put both the alphabet soup and the tomato sauce in the basket",
-        "path": "benchmark_figs/level-iii-task-path/long-1",
-        "route": "Gripper → Alphabet soup → Basket → Tomato sauce → Basket"
+        "path": "benchmark_figs/scene-zones/long-1",
+        "route": "Gripper → Alphabet soup → Basket → Tomato sauce → Basket",
+        "description": "The obstacle crosses the estimated task route while the arm holds position."
       },
       {
         "name": "Put the white mug on the left plate and put the yellow and white mug on the right plate",
-        "path": "benchmark_figs/level-iii-task-path/long-2",
-        "route": "Gripper → White mug → Left plate → Two-tone mug → Right plate"
+        "path": "benchmark_figs/scene-zones/long-2",
+        "route": "Gripper → White mug → Left plate → Two-tone mug → Right plate",
+        "description": "The obstacle crosses the estimated task route while the arm holds position."
       },
       {
         "name": "Put the white mug on the plate and put the chocolate pudding to the right of the plate",
-        "path": "benchmark_figs/level-iii-task-path/long-3",
-        "route": "Gripper → White mug → Plate → Chocolate pudding → Right of plate"
+        "path": "benchmark_figs/scene-zones/long-3",
+        "route": "Gripper → White mug → Plate → Chocolate pudding → Right of plate",
+        "description": "The obstacle crosses the estimated task route while the arm holds position."
       }
     ]
   }
@@ -333,34 +358,29 @@ const levels = {
   II: ['On the movement path', 'The obstacle is placed along the expected movement path.'],
   III: ['Moving obstacle', 'The arm holds its start pose while the obstacle crosses the estimated task route. The yellow ring marks the 3D crossing.']
 };
-const state = {suite:'spatial', level:'III', task:0, event:'object', speed:'10', animate:!matchMedia('(prefers-reduced-motion: reduce)').matches};
+const state = {suite:'spatial', level:'III', task:0, speed:20, animate:!matchMedia('(prefers-reduced-motion: reduce)').matches};
 function mark(group, value) {
   for (const button of byId(group).querySelectorAll('button')) button.setAttribute('aria-pressed', String(button.dataset.key === value));
 }
-function supportsHand() {
-  return state.suite === 'spatial' && state.level === 'III' && state.task === 0;
-}
+const rates = [5, 10, 20, 40, 80];
 function render() {
   const rows = catalog[state.suite][state.level], row = rows[state.task];
   const moving = state.level === 'III';
-  const hand = supportsHand() && state.event === 'hand';
-  byId('event-row').hidden = !supportsHand();
-  mark('events', hand ? 'hand' : 'object');
-  byId('speed-label').textContent = hand ? 'Nominal reach speed' : 'Obstacle speed';
-  mark('suites', state.suite); mark('levels', state.level); mark('speeds', state.speed);
+  mark('suites', state.suite); mark('levels', state.level);
+  byId('speed').value = rates.indexOf(state.speed);
+  byId('speed-value').textContent = state.speed + ' cm/s';
+  byId('speed').setAttribute('aria-valuetext', byId('speed-value').textContent);
   byId('selection').textContent = state.suite[0].toUpperCase() + state.suite.slice(1) + ' / Level ' + state.level;
-  byId('level-name').textContent = hand ? 'Hand places a cup' : levels[state.level][0];
-  byId('description').textContent = hand ? 'A hand reaches in from the table edge, sets a mug beside the plate, and withdraws. The gripper holds its starting pose.' : levels[state.level][1];
+  byId('level-name').textContent = levels[state.level][0];
+  byId('description').textContent = row.description || levels[state.level][1];
   byId('route').hidden = !moving;
   byId('route').textContent = moving ? row.route : '';
   byId('speed-row').hidden = !moving; byId('motion').hidden = !moving;
   byId('motion').textContent = state.animate ? 'Show crossing frame' : 'Play animation';
-  byId('caption').textContent = hand ? 'Yellow dashes show the bowl task. The ring marks where the hand crosses that route.' : moving ? 'Yellow dashes trace the task. Cyan traces the obstacle.' : 'Original SafeLIBERO scene.';
+  byId('caption').textContent = moving ? 'Yellow dashes trace the task. The ring marks a crossing.' : 'One representative episode from the original SafeLIBERO level.';
   const scene = byId('scene');
-  let src = row.path;
-  if (hand) src = 'benchmark_figs/hand-cup/hand-' + state.speed + (state.animate ? '-motion.webp' : '.webp');
-  else if (moving) src = row.path + '-' + state.speed + (state.animate ? '.gif' : '.webp');
-  scene.alt = 'Level ' + state.level + '. ' + row.name + (hand ? '. A hand places a cup.' : '');
+  const src = moving ? row.path + '-' + state.speed + (state.animate ? '-motion.webp' : '.webp') : row.path;
+  scene.alt = 'Level ' + state.level + '. ' + row.name + (moving ? '. ' + row.description : '');
   if (scene.getAttribute('src') !== src) scene.src = src;
   rows.forEach((item, index) => {
     const button = byId('tasks').children[index];
@@ -369,12 +389,13 @@ function render() {
   });
 }
 function readHash() {
-  const match = /^#(iii|ii|i)-(spatial|goal|object|long)(?:-([1-4]))?(-hand)?$/i.exec(location.hash);
-  if (match && match[4]) state.speed = '20';
-  if (match) Object.assign(state, {suite:match[2].toLowerCase(), level:match[1].toUpperCase(), task:Number(match[3] || 1)-1, event: match[4] ? 'hand' : 'object'});
+  const match = /^#(iii|ii|i)-(spatial|goal|object|long)(?:-([1-4]))?(?:-hand)?(?:-v(5|10|20|40|80))?$/i.exec(location.hash);
+  if (match) Object.assign(state, {suite:match[2].toLowerCase(), level:match[1].toUpperCase(),
+    task:Number(match[3] || 1)-1, speed:Number(match[4] || 20)});
 }
 function saveSelection() {
-  history.replaceState(null, '', '#' + state.level.toLowerCase() + '-' + state.suite + '-' + (state.task+1) + (supportsHand() && state.event === 'hand' ? '-hand' : ''));
+  const speedHash = state.level === 'III' ? '-v' + state.speed : '';
+  history.replaceState(null, '', '#' + state.level.toLowerCase() + '-' + state.suite + '-' + (state.task+1) + speedHash);
 }
 for (let i=0; i<4; i++) {
   const button = document.createElement('button');
@@ -383,13 +404,16 @@ for (let i=0; i<4; i++) {
   button.addEventListener('click', () => {state.task=i; saveSelection(); render();});
   byId('tasks').append(button);
 }
-for (const [id, key] of [['suites','suite'],['levels','level'],['speeds','speed'],['events','event']]) {
+for (const [id, key] of [['suites','suite'],['levels','level']]) {
   byId(id).addEventListener('click', event => {
     const button = event.target.closest('button'); if (!button) return;
     if (key === 'suite' && state.suite !== button.dataset.key) state.task=0;
     state[key] = button.dataset.key; saveSelection(); render();
   });
 }
+byId('speed').addEventListener('input', event => {
+  state.speed = rates[Number(event.target.value)]; saveSelection(); render();
+});
 byId('motion').addEventListener('click', () => {state.animate=!state.animate; render();});
 window.addEventListener('hashchange', () => {readHash(); render();});
 readHash(); render();
