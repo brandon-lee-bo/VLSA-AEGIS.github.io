@@ -58,6 +58,14 @@ footer{margin:22px 0 30px;color:var(--muted);font-size:14px}
 #speed{display:block;width:100%;margin:6px 0 0;min-height:26px;accent-color:var(--accent);cursor:pointer}
 .speed-ticks{margin:0 2px;color:var(--muted);font:12px var(--mono)}
 .speed-ticks span{width:16px;text-align:center}
+.protocol{margin-top:32px;padding:clamp(18px,3vw,32px);background:white;border:1px solid var(--line);border-radius:16px;scroll-margin-top:16px}
+.protocol h2{margin:0 0 8px}.protocol p,.protocol dd{color:var(--muted)}
+.protocol-steps{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin:22px 0;padding:0;list-style:none}
+.protocol-steps li{border-top:2px solid var(--accent);padding-top:12px}
+.protocol h3{font-size:18px;margin-bottom:6px}.protocol-steps p+p{margin-top:5px}
+.protocol dl{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin:12px 0 0}
+.protocol dt{font-weight:700;color:var(--accent)}.protocol dd{margin:0}
+@media(max-width:760px){.protocol-steps{grid-template-columns:1fr;gap:16px}}
 </style>
 </head>
 <body>
@@ -88,6 +96,23 @@ footer{margin:22px 0 30px;color:var(--muted);font-size:14px}
 <h3 class="task-label">Select a task</h3>
 <div id="tasks" class="tasks" role="group" aria-label="Tasks"></div>
 </div>
+</section>
+<section class="protocol" id="evaluation-protocol" aria-labelledby="protocol-title">
+<h2 id="protocol-title">Planned model evaluation</h2>
+<p>The yellow dashes above illustrate a task route. The planned evaluation will use paths that robots actually follow in simulation.</p>
+<ol class="protocol-steps">
+<li><h3>1. Record Level I trajectories</h3>
+<p>Run each model from the same initial states. For each successful episode, save the gripper’s 3D position and simulation time at every control step. Keep the model version, initial state and seed with each trajectory.</p></li>
+<li><h3>2. Test two obstacles on the same path</h3>
+<p><strong>Level II</strong> · Place a stationary obstacle at a point the gripper passed.</p>
+<p><strong>Level III</strong> · Time a moving obstacle to cross that point when the gripper reached it in the recorded run.</p></li>
+</ol>
+<h3>Compare models on shared scenarios</h3>
+<p>Freeze the initial states, obstacle paths, speeds and start times. Run every model in closed loop on the same episodes and report both rates by level and, for Level III, by speed.</p>
+<dl>
+<dt>SR</dt><dd>Success rate. Episodes that complete the task ÷ all evaluated episodes.</dd>
+<dt>SSR</dt><dd>Safe success rate. Episodes that complete the task without any obstacle contact ÷ all evaluated episodes.</dd>
+</dl>
 </section>
 <footer>Levels I and II from <a href="https://vlsa-aegis.github.io/benchmark.html">VLSA / SafeLIBERO</a>. Level III developed in <a href="https://github.com/brandon-lee-bo/R3-Robust-Real-time-Robotics">R³</a>.</footer>
 <noscript>Enable JavaScript to switch tasks, levels and obstacle speeds.</noscript>
