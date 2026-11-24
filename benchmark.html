@@ -74,7 +74,8 @@ footer{margin:22px 0 30px;color:var(--muted);font-size:14px}
 <h2 id="level-name">Moving obstacle</h2>
 <p id="description" class="trial">The arm holds its start pose while the obstacle crosses the estimated task route. The yellow ring marks the 3D crossing.</p>
 <p class="trial" id="route" style="margin-top:10px"></p>
-<div id="speed-row" class="control-row"><span>Obstacle speed</span><div class="switch" id="speeds" role="group" aria-label="Obstacle speed"><button data-key="10" aria-pressed="true">10 cm/s</button><button data-key="20" aria-pressed="false">20 cm/s</button></div></div>
+<div id="event-row" class="control-row" hidden><span>Event</span><div id="events" class="switch" role="group" aria-label="Intrusion type"><button data-key="object" aria-pressed="true">Object crosses</button><button data-key="hand" aria-pressed="false">Hand places cup</button></div></div>
+<div id="speed-row" class="control-row"><span id="speed-label">Obstacle speed</span><div class="switch" id="speeds" role="group" aria-label="Obstacle speed"><button data-key="10" aria-pressed="true">10 cm/s</button><button data-key="20" aria-pressed="false">20 cm/s</button></div></div>
 <h3 class="task-label">Select a task</h3>
 <div id="tasks" class="tasks" role="group" aria-label="Tasks"></div>
 </div>
@@ -332,25 +333,34 @@ const levels = {
   II: ['On the movement path', 'The obstacle is placed along the expected movement path.'],
   III: ['Moving obstacle', 'The arm holds its start pose while the obstacle crosses the estimated task route. The yellow ring marks the 3D crossing.']
 };
-const state = {suite:'spatial', level:'III', task:0, speed:'10', animate:!matchMedia('(prefers-reduced-motion: reduce)').matches};
+const state = {suite:'spatial', level:'III', task:0, event:'object', speed:'10', animate:!matchMedia('(prefers-reduced-motion: reduce)').matches};
 function mark(group, value) {
   for (const button of byId(group).querySelectorAll('button')) button.setAttribute('aria-pressed', String(button.dataset.key === value));
+}
+function supportsHand() {
+  return state.suite === 'spatial' && state.level === 'III' && state.task === 0;
 }
 function render() {
   const rows = catalog[state.suite][state.level], row = rows[state.task];
   const moving = state.level === 'III';
+  const hand = supportsHand() && state.event === 'hand';
+  byId('event-row').hidden = !supportsHand();
+  mark('events', hand ? 'hand' : 'object');
+  byId('speed-label').textContent = hand ? 'Nominal reach speed' : 'Obstacle speed';
   mark('suites', state.suite); mark('levels', state.level); mark('speeds', state.speed);
   byId('selection').textContent = state.suite[0].toUpperCase() + state.suite.slice(1) + ' / Level ' + state.level;
-  byId('level-name').textContent = levels[state.level][0];
-  byId('description').textContent = levels[state.level][1];
+  byId('level-name').textContent = hand ? 'Hand places a cup' : levels[state.level][0];
+  byId('description').textContent = hand ? 'A hand reaches in from the table edge, sets a mug beside the plate, and withdraws. The gripper holds its starting pose.' : levels[state.level][1];
   byId('route').hidden = !moving;
   byId('route').textContent = moving ? row.route : '';
   byId('speed-row').hidden = !moving; byId('motion').hidden = !moving;
   byId('motion').textContent = state.animate ? 'Show crossing frame' : 'Play animation';
-  byId('caption').textContent = moving ? 'Yellow dashes trace the task. Cyan traces the obstacle.' : 'Original SafeLIBERO scene.';
+  byId('caption').textContent = hand ? 'Yellow dashes show the bowl task. The ring marks where the hand crosses that route.' : moving ? 'Yellow dashes trace the task. Cyan traces the obstacle.' : 'Original SafeLIBERO scene.';
   const scene = byId('scene');
-  const src = moving ? row.path + '-' + state.speed + (state.animate ? '.gif' : '.webp') : row.path;
-  scene.alt = 'Level ' + state.level + '. ' + row.name;
+  let src = row.path;
+  if (hand) src = 'benchmark_figs/hand-cup/hand-' + state.speed + (state.animate ? '-motion.webp' : '.webp');
+  else if (moving) src = row.path + '-' + state.speed + (state.animate ? '.gif' : '.webp');
+  scene.alt = 'Level ' + state.level + '. ' + row.name + (hand ? '. A hand places a cup.' : '');
   if (scene.getAttribute('src') !== src) scene.src = src;
   rows.forEach((item, index) => {
     const button = byId('tasks').children[index];
@@ -359,11 +369,12 @@ function render() {
   });
 }
 function readHash() {
-  const match = /^#(iii|ii|i)-(spatial|goal|object|long)(?:-([1-4]))?$/i.exec(location.hash);
-  if (match) Object.assign(state, {suite:match[2].toLowerCase(), level:match[1].toUpperCase(), task:Number(match[3] || 1)-1});
+  const match = /^#(iii|ii|i)-(spatial|goal|object|long)(?:-([1-4]))?(-hand)?$/i.exec(location.hash);
+  if (match && match[4]) state.speed = '20';
+  if (match) Object.assign(state, {suite:match[2].toLowerCase(), level:match[1].toUpperCase(), task:Number(match[3] || 1)-1, event: match[4] ? 'hand' : 'object'});
 }
 function saveSelection() {
-  history.replaceState(null, '', '#' + state.level.toLowerCase() + '-' + state.suite + '-' + (state.task+1));
+  history.replaceState(null, '', '#' + state.level.toLowerCase() + '-' + state.suite + '-' + (state.task+1) + (supportsHand() && state.event === 'hand' ? '-hand' : ''));
 }
 for (let i=0; i<4; i++) {
   const button = document.createElement('button');
@@ -372,7 +383,7 @@ for (let i=0; i<4; i++) {
   button.addEventListener('click', () => {state.task=i; saveSelection(); render();});
   byId('tasks').append(button);
 }
-for (const [id, key] of [['suites','suite'],['levels','level'],['speeds','speed']]) {
+for (const [id, key] of [['suites','suite'],['levels','level'],['speeds','speed'],['events','event']]) {
   byId(id).addEventListener('click', event => {
     const button = event.target.closest('button'); if (!button) return;
     if (key === 'suite' && state.suite !== button.dataset.key) state.task=0;
