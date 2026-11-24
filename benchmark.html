@@ -163,6 +163,16 @@
         .next-btn { right: 10px; }
 
         @media (max-width: 768px) { .nav-btn { display: none; } }
+
+        .l3-links { display:flex; flex-wrap:wrap; gap:.7rem 1.2rem; margin:.8rem 0; }
+        .l3-links a, .level-three a { color:#076b93; font-weight:600; }
+        .level-three { scroll-margin-top:1rem; }
+        .level-three .benchmark-card { flex:0 0 calc(50% - 12px); text-align:left; }
+        .level-three .benchmark-card img { width:100%; max-width:320px; height:auto; aspect-ratio:1; margin:0 auto 12px; }
+        .level-three .task-name { font-size:1rem; line-height:1.4; }
+        .l3-controls { display:flex; flex-wrap:wrap; align-items:center; gap:.65rem; margin:.25rem 0 .85rem; font-size:.95rem; }
+        .l3-controls select, .l3-controls button { font:inherit; color:#234; background:white; border:1px solid #b7c5ce; border-radius:7px; padding:.32rem .65rem; }
+        @media(max-width:700px){ .level-three .benchmark-card{flex-basis:95%;} }
     </style>
 </head>
 <body>
@@ -201,7 +211,7 @@
         LIBERO is a widely used benchmark in the field, which comprises <strong>LIBERO-Spatial</strong>, <strong>LIBERO-Object</strong>, <strong>LIBERO-Goal</strong>, and <strong>LIBERO-Long</strong>, focusing on spatial reasoning, object manipulation, goal-conditioned tasks, and long-horizon planning, respectively. However, since objects in the original LIBERO environments rarely collide with the robot arm during movement, it is difficult to evaluate the safety capabilities of our method.
     </p>
     <p style="margin-bottom: 25px;">
-        Therefore, we propose <strong>SafeLIBERO</strong> to assess performance in complex environments. Specifically, we select four tasks from each LIBERO suite and further divide each into two scenarios with different safety levels based on the degree of interference posed by the added obstacle:
+        Therefore, we propose <strong>SafeLIBERO</strong> to assess performance in complex environments. Specifically, we select four tasks from each LIBERO suite and originally divide each into two scenarios with different safety levels based on the degree of interference posed by the added obstacle:
     </p>
     <div class="level-definitions" style="margin-bottom: 25px;">
         <ul>
@@ -213,12 +223,25 @@
                 <span class="level-label">Level II:</span>
                 <span class="level-desc">Scenarios where the obstacle is located further away but obstructs the movement.</span>
             </li>
+            <li><span class="level-label">Level III (R³ extension)</span>
+                <span class="level-desc">A moving obstacle follows a straight 16 cm lane. Speed and start time are configurable.</span></li>
         </ul>
     </div>
     <p style="margin-bottom: 30px;">
-        It is worth noting that for some tasks, the distinction between these two intervention levels may be less obvious. For each scenario, we randomize the positions of obstacles and other objects within a small range over <strong>50 episodes</strong>. We employ a diverse set of objects as obstacles, including moka pots, storage boxes, milk cartons, wine bottles, mugs, and books. We construct 4 suites comprising <strong>16 tasks</strong> and <strong>32 scenarios</strong>, totaling <strong>1600 episodes</strong>.
+        It is worth noting that for some tasks, the distinction between these two intervention levels may be less obvious. For each scenario, we randomize the positions of obstacles and other objects within a small range over <strong>50 episodes</strong>. We employ a diverse set of objects as obstacles, including moka pots, storage boxes, milk cartons, wine bottles, mugs, and books. Levels I and II together cover 4 suites comprising <strong>16 tasks</strong> and <strong>32 scenarios</strong>, totaling <strong>1600 episodes</strong>.
     </p>
 
+    <section id="level-iii">
+        <h2>Level III · Moving obstacles</h2>
+        <p>Each animation uses the first Level I initial state and a stationary arm command. The yellow ring follows the obstacle. Compare two simulated speeds on the same route, with motion starting at 0.6 s.</p>
+        <nav class="l3-links" aria-label="Moving obstacle suites">
+            <a href="#iii-spatial">Spatial</a>
+            <a href="#iii-goal">Goal</a>
+            <a href="#iii-object">Object</a>
+            <a href="#iii-long">Long</a>
+            <a href="https://github.com/brandon-lee-bo/vlsa-aegis/blob/main/docs/level-iii.md">Code and usage</a>
+        </nav>
+    </section>
     </div>
 
     <div class="suite-title"><span class="suite-badge">SafeLIBERO-Spatial</span></div>
@@ -271,6 +294,22 @@
         </div>
     </div>
 
+    <section class="level-three" id="iii-spatial" aria-label="Spatial moving obstacles">
+        <div class="level-header">Level III · Moving obstacles</div>
+        <div class="l3-controls"><label>Obstacle speed <select aria-label="Spatial obstacle speed"><option value="10">10 cm/s</option><option value="20">20 cm/s</option></select></label>
+        <button type="button" class="motion-toggle" aria-pressed="true">Show still frames</button></div>
+        <div class="carousel-wrapper">
+            <button class="nav-btn prev-btn" aria-label="Previous spatial task" onclick="scrollTrack(this,-1)">‹</button>
+            <button class="nav-btn next-btn" aria-label="Next spatial task" onclick="scrollTrack(this,1)">›</button>
+            <div class="carousel-track" tabindex="0">
+                <div class="benchmark-card"><img loading="lazy" width="320" height="320" src="benchmark_figs/level-iii/spatial-0-10.gif" data-base="benchmark_figs/level-iii/spatial-0" alt="Moving obstacle in Task 1: Pick up the black bowl between the plate and the ramekin and place it on the plate"><div class="task-name">Task 1: Pick up the black bowl between the plate and the ramekin and place it on the plate</div></div>
+                <div class="benchmark-card"><img loading="lazy" width="320" height="320" src="benchmark_figs/level-iii/spatial-1-10.gif" data-base="benchmark_figs/level-iii/spatial-1" alt="Moving obstacle in Task 2: Pick up the black bowl on the ramekin and place it on the plate"><div class="task-name">Task 2: Pick up the black bowl on the ramekin and place it on the plate</div></div>
+                <div class="benchmark-card"><img loading="lazy" width="320" height="320" src="benchmark_figs/level-iii/spatial-2-10.gif" data-base="benchmark_figs/level-iii/spatial-2" alt="Moving obstacle in Task 3: Pick up the black bowl on the stove and place it on the plate"><div class="task-name">Task 3: Pick up the black bowl on the stove and place it on the plate</div></div>
+                <div class="benchmark-card"><img loading="lazy" width="320" height="320" src="benchmark_figs/level-iii/spatial-3-10.gif" data-base="benchmark_figs/level-iii/spatial-3" alt="Moving obstacle in Task 4: Pick up the black bowl on the wooden cabinet and place it on the plate"><div class="task-name">Task 4: Pick up the black bowl on the wooden cabinet and place it on the plate</div></div>
+            </div>
+        </div>
+    </section>
+
     <div class="suite-title"><span class="suite-badge">SafeLIBERO-Goal</span></div>
 
     <div class="level-header">Level I</div>
@@ -320,6 +359,22 @@
             </div>
         </div>
     </div>
+
+    <section class="level-three" id="iii-goal" aria-label="Goal moving obstacles">
+        <div class="level-header">Level III · Moving obstacles</div>
+        <div class="l3-controls"><label>Obstacle speed <select aria-label="Goal obstacle speed"><option value="10">10 cm/s</option><option value="20">20 cm/s</option></select></label>
+        <button type="button" class="motion-toggle" aria-pressed="true">Show still frames</button></div>
+        <div class="carousel-wrapper">
+            <button class="nav-btn prev-btn" aria-label="Previous goal task" onclick="scrollTrack(this,-1)">‹</button>
+            <button class="nav-btn next-btn" aria-label="Next goal task" onclick="scrollTrack(this,1)">›</button>
+            <div class="carousel-track" tabindex="0">
+                <div class="benchmark-card"><img loading="lazy" width="320" height="320" src="benchmark_figs/level-iii/goal-0-10.gif" data-base="benchmark_figs/level-iii/goal-0" alt="Moving obstacle in Task 1: Put the bowl on the plate"><div class="task-name">Task 1: Put the bowl on the plate</div></div>
+                <div class="benchmark-card"><img loading="lazy" width="320" height="320" src="benchmark_figs/level-iii/goal-2-10.gif" data-base="benchmark_figs/level-iii/goal-2" alt="Moving obstacle in Task 2: Put the bowl on the stove"><div class="task-name">Task 2: Put the bowl on the stove</div></div>
+                <div class="benchmark-card"><img loading="lazy" width="320" height="320" src="benchmark_figs/level-iii/goal-1-10.gif" data-base="benchmark_figs/level-iii/goal-1" alt="Moving obstacle in Task 3: Put the bowl on top of the cabinet"><div class="task-name">Task 3: Put the bowl on top of the cabinet</div></div>
+                <div class="benchmark-card"><img loading="lazy" width="320" height="320" src="benchmark_figs/level-iii/goal-3-10.gif" data-base="benchmark_figs/level-iii/goal-3" alt="Moving obstacle in Task 4: Open the top drawer and put the bowl inside"><div class="task-name">Task 4: Open the top drawer and put the bowl inside</div></div>
+            </div>
+        </div>
+    </section>
 
     <div class="suite-title"><span class="suite-badge">SafeLIBERO-Object</span></div>
 
@@ -371,6 +426,22 @@
         </div>
     </div>
 
+    <section class="level-three" id="iii-object" aria-label="Object moving obstacles">
+        <div class="level-header">Level III · Moving obstacles</div>
+        <div class="l3-controls"><label>Obstacle speed <select aria-label="Object obstacle speed"><option value="10">10 cm/s</option><option value="20">20 cm/s</option></select></label>
+        <button type="button" class="motion-toggle" aria-pressed="true">Show still frames</button></div>
+        <div class="carousel-wrapper">
+            <button class="nav-btn prev-btn" aria-label="Previous object task" onclick="scrollTrack(this,-1)">‹</button>
+            <button class="nav-btn next-btn" aria-label="Next object task" onclick="scrollTrack(this,1)">›</button>
+            <div class="carousel-track" tabindex="0">
+                <div class="benchmark-card"><img loading="lazy" width="320" height="320" src="benchmark_figs/level-iii/object-3-10.gif" data-base="benchmark_figs/level-iii/object-3" alt="Moving obstacle in Task 1: Pick up the bbq sauce and place it in the basket"><div class="task-name">Task 1: Pick up the bbq sauce and place it in the basket</div></div>
+                <div class="benchmark-card"><img loading="lazy" width="320" height="320" src="benchmark_figs/level-iii/object-1-10.gif" data-base="benchmark_figs/level-iii/object-1" alt="Moving obstacle in Task 2: Pick up the chocolate pudding and place it in the basket"><div class="task-name">Task 2: Pick up the chocolate pudding and place it in the basket</div></div>
+                <div class="benchmark-card"><img loading="lazy" width="320" height="320" src="benchmark_figs/level-iii/object-2-10.gif" data-base="benchmark_figs/level-iii/object-2" alt="Moving obstacle in Task 3: Pick up the milk and place it in the basket"><div class="task-name">Task 3: Pick up the milk and place it in the basket</div></div>
+                <div class="benchmark-card"><img loading="lazy" width="320" height="320" src="benchmark_figs/level-iii/object-0-10.gif" data-base="benchmark_figs/level-iii/object-0" alt="Moving obstacle in Task 4: Pick up the orange juice and place it in the basket"><div class="task-name">Task 4: Pick up the orange juice and place it in the basket</div></div>
+            </div>
+        </div>
+    </section>
+
     <div class="suite-title"><span class="suite-badge">SafeLIBERO-Long</span></div>
 
     <div class="level-header">Level I</div>
@@ -421,11 +492,44 @@
         </div>
     </div>
 
+    <section class="level-three" id="iii-long" aria-label="Long moving obstacles">
+        <div class="level-header">Level III · Moving obstacles</div>
+        <div class="l3-controls"><label>Obstacle speed <select aria-label="Long obstacle speed"><option value="10">10 cm/s</option><option value="20">20 cm/s</option></select></label>
+        <button type="button" class="motion-toggle" aria-pressed="true">Show still frames</button></div>
+        <div class="carousel-wrapper">
+            <button class="nav-btn prev-btn" aria-label="Previous long task" onclick="scrollTrack(this,-1)">‹</button>
+            <button class="nav-btn next-btn" aria-label="Next long task" onclick="scrollTrack(this,1)">›</button>
+            <div class="carousel-track" tabindex="0">
+                <div class="benchmark-card"><img loading="lazy" width="320" height="320" src="benchmark_figs/level-iii/long-0-10.gif" data-base="benchmark_figs/level-iii/long-0" alt="Moving obstacle in Task 1: Put both the alphabet soup and the cream cheese box in the basket"><div class="task-name">Task 1: Put both the alphabet soup and the cream cheese box in the basket</div></div>
+                <div class="benchmark-card"><img loading="lazy" width="320" height="320" src="benchmark_figs/level-iii/long-1-10.gif" data-base="benchmark_figs/level-iii/long-1" alt="Moving obstacle in Task 2: Put both the alphabet soup and the tomato sauce in the basket"><div class="task-name">Task 2: Put both the alphabet soup and the tomato sauce in the basket</div></div>
+                <div class="benchmark-card"><img loading="lazy" width="320" height="320" src="benchmark_figs/level-iii/long-2-10.gif" data-base="benchmark_figs/level-iii/long-2" alt="Moving obstacle in Task 3: Put the white mug on the left plate and put the yellow and white mug on the right plate"><div class="task-name">Task 3: Put the white mug on the left plate and put the yellow and white mug on the right plate</div></div>
+                <div class="benchmark-card"><img loading="lazy" width="320" height="320" src="benchmark_figs/level-iii/long-3-10.gif" data-base="benchmark_figs/level-iii/long-3" alt="Moving obstacle in Task 4: Put the white mug on the plate and put the chocolate pudding to the right of the plate"><div class="task-name">Task 4: Put the white mug on the plate and put the chocolate pudding to the right of the plate</div></div>
+            </div>
+        </div>
+    </section>
+
     <div style="height: 100px;"></div>
 
 </div>
 
 <script>
+
+    document.querySelectorAll('.level-three').forEach(section => {
+        const select = section.querySelector('select');
+        const toggle = section.querySelector('.motion-toggle');
+        let animate = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        function update() {
+            for (const img of section.querySelectorAll('[data-base]')) {
+                const path = img.dataset.base + '-' + select.value + (animate ? '.gif' : '.webp');
+                if (img.getAttribute('src') !== path) img.src = path;
+            }
+            toggle.textContent = animate ? 'Show still frames' : 'Play animations';
+            toggle.setAttribute('aria-pressed', String(animate));
+        }
+        select.addEventListener('change', update);
+        toggle.addEventListener('click', () => { animate = !animate; update(); });
+        update();
+    });
     function scrollTrack(btn, direction) {
         const wrapper = btn.closest('.carousel-wrapper');
         const track = wrapper.querySelector('.carousel-track');
