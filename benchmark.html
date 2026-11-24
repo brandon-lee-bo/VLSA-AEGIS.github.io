@@ -51,13 +51,41 @@ h2{font-size:clamp(21px,2.4vw,30px);line-height:1.15;letter-spacing:-.035em;marg
 footer{margin:22px 0 30px;color:var(--muted);font-size:14px}
 @media(max-width:760px){.explorer{grid-template-columns:1fr}.side{border-left:0;border-top:1px solid var(--line)}.stage{min-height:0;padding:10px}.stage img{max-height:300px}.switch button{padding:6px 10px}.bar .wrap{min-height:50px}.links{gap:12px}.suite-row{gap:9px}}
 @media(max-width:390px){.identity{font-size:14px}.links{font-size:12px;gap:8px}.wrap{padding:0 12px}}
+
+.cross-demo{display:grid;grid-template-columns:minmax(210px,.85fr) minmax(230px,1fr);align-items:center;gap:clamp(18px,4vw,48px);border:1px solid var(--line);border-radius:16px;background:#fff;padding:clamp(16px,3vw,30px);margin:0 0 26px}
+.cross-demo h2{margin:0 0 12px}
+.cross-demo p{color:var(--muted);max-width:45ch;font-size:15px}
+.cross-demo video{display:block;width:min(100%,380px);aspect-ratio:1;border-radius:9px;margin:auto;background:#22312c}
+.cross-legend{padding:0;list-style:none;display:grid;gap:6px;font-size:14px}
+.cross-legend li{display:flex;gap:10px;align-items:center}
+.cross-legend i{display:inline-block;width:26px;flex:none;border-top:3px dashed #a27600}
+.cross-legend li:nth-child(2) i{border-top:3px solid #008f79}
+.cross-legend li:last-child i{width:14px;height:14px;border:3px solid #c28f00;border-radius:50%;margin:0 6px}
+.cross-tools{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}
+.cross-tools button{border:1px solid var(--line);background:var(--paper);border-radius:6px;padding:6px 9px;font-size:14px}
+.cross-links{font-size:14px}
+@media(max-width:660px){.cross-demo{grid-template-columns:1fr;gap:12px}.cross-demo video{width:min(100%,330px)}}
 </style>
 </head>
 <body>
 <div class="bar"><div class="wrap"><div class="identity"><span class="mark">R³</span> SafeLIBERO</div><nav class="links" aria-label="Project resources"><a href="https://github.com/brandon-lee-bo/vlsa-aegis">GitHub</a><a href="https://github.com/brandon-lee-bo/vlsa-aegis/blob/main/docs/level-iii.md">Run Level III</a></nav></div></div>
 <main class="wrap" id="level-iii">
 <header><h1>Obstacle benchmark</h1><p>Explore 16 manipulation tasks across four LIBERO suites. Compare the original static obstacles with moving obstacles in Level III.</p></header>
-<div class="suite-row">
+<section class="cross-demo" id="crossing-demo" aria-labelledby="cross-title">
+<div>
+<h2 id="cross-title">Watch the bottle cross the reach path</h2>
+<p>The yellow dashes connect the fixed gripper to the black bowl. When the bottle intersects this reference line in 3D, a yellow ring marks the crossing point. The clip plays at half speed.</p>
+<ul class="cross-legend"><li><i aria-hidden="true"></i>Estimated gripper-to-bowl path</li><li><i aria-hidden="true"></i>Bottle motion</li><li><i aria-hidden="true"></i>3D intersection</li></ul>
+<div class="cross-tools" aria-label="Inspect a moment"><button type="button" data-moment="1.8">Before</button><button type="button" data-moment="2.8">At crossing</button><button type="button" data-moment="4.2">After</button></div>
+<div class="cross-links"><a href="https://github.com/brandon-lee-bo/R3-Robust-Real-time-Robotics/tree/main/benchmarks/phase1_1/through">Scene and geometry checks</a> · <a href="#task-explorer">Browse all tasks</a></div>
+</div>
+<video id="cross-clip" preload="metadata" controls muted loop playsinline aria-label="A moving bottle intersects the yellow dashed reference path" poster="benchmark_figs/crossing-demo/crossing.webp" >
+<source src="benchmark_figs/crossing-demo/spatial.mp4" type="video/mp4">
+<source src="benchmark_figs/crossing-demo/spatial.webm" type="video/webm">
+<a href="benchmark_figs/crossing-demo/spatial.mp4">Download crossing demo</a>
+</video>
+</section>
+<div class="suite-row" id="task-explorer">
 <div class="switch" id="suites" role="group" aria-label="Task suite">
 <button data-key="spatial" aria-pressed="true">Spatial</button><button data-key="object" aria-pressed="false">Object</button><button data-key="goal" aria-pressed="false">Goal</button><button data-key="long" aria-pressed="false">Long</button>
 </div>
@@ -362,6 +390,24 @@ for (const [id, key] of [['suites','suite'],['levels','level'],['speeds','speed'
 byId('motion').addEventListener('click', () => {state.animate=!state.animate; render();});
 window.addEventListener('hashchange', () => {readHash(); render();});
 readHash(); render();
+
+const clip = byId('cross-clip');
+let pendingMoment = null;
+function seekCrossing() {
+  if (pendingMoment !== null && clip.readyState >= 1) {
+    clip.currentTime = pendingMoment;
+    pendingMoment = null;
+  }
+}
+clip.addEventListener('loadedmetadata', seekCrossing);
+for (const button of document.querySelectorAll('[data-moment]')) {
+  button.addEventListener('click', () => {
+    clip.pause();
+    pendingMoment = Number(button.dataset.moment);
+    seekCrossing();
+  });
+}
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches) clip.play().catch(() => {});
 </script>
 </body>
 </html>
