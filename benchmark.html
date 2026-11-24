@@ -33,7 +33,7 @@ header p{margin-top:12px;color:var(--muted);max-width:72ch}
 .camera{background:#e7ece9;min-width:0;display:grid;grid-template-rows:1fr auto}
 .stage{min-height:320px;display:grid;place-items:center;background:radial-gradient(ellipse at center,#fbfcfa,#e3e9e5 90%);padding:16px}
 .stage img{display:block;max-width:100%;max-height:410px;object-fit:contain;border-radius:6px}
-.stage img[src*="/level-iii/"]{width:min(100%,388px)}
+.stage img[src*="/level-iii-task-path/"]{width:min(100%,388px)}
 .camera-caption{justify-content:space-between;gap:12px;min-height:50px;background:#edf1ee;border-top:1px solid var(--line);padding:8px 16px;color:var(--muted);font-size:13px}
 .camera-caption button{background:#fff;border:1px solid #bacac5;border-radius:6px;padding:5px 10px;font-size:13px}
 .side{padding:clamp(18px,3vw,32px);border-left:1px solid var(--line)}
@@ -52,39 +52,12 @@ footer{margin:22px 0 30px;color:var(--muted);font-size:14px}
 @media(max-width:760px){.explorer{grid-template-columns:1fr}.side{border-left:0;border-top:1px solid var(--line)}.stage{min-height:0;padding:10px}.stage img{max-height:300px}.switch button{padding:6px 10px}.bar .wrap{min-height:50px}.links{gap:12px}.suite-row{gap:9px}}
 @media(max-width:390px){.identity{font-size:14px}.links{font-size:12px;gap:8px}.wrap{padding:0 12px}}
 
-.cross-demo{display:grid;grid-template-columns:minmax(210px,.85fr) minmax(230px,1fr);align-items:center;gap:clamp(18px,4vw,48px);border:1px solid var(--line);border-radius:16px;background:#fff;padding:clamp(16px,3vw,30px);margin:0 0 26px}
-.cross-demo h2{margin:0 0 12px}
-.cross-demo p{color:var(--muted);max-width:45ch;font-size:15px}
-.cross-demo video{display:block;width:min(100%,380px);aspect-ratio:1;border-radius:9px;margin:auto;background:#22312c}
-.cross-legend{padding:0;list-style:none;display:grid;gap:6px;font-size:14px}
-.cross-legend li{display:flex;gap:10px;align-items:center}
-.cross-legend i{display:inline-block;width:26px;flex:none;border-top:3px dashed #a27600}
-.cross-legend li:nth-child(2) i{border-top:3px solid #008f79}
-.cross-legend li:last-child i{width:14px;height:14px;border:3px solid #c28f00;border-radius:50%;margin:0 6px}
-.cross-tools{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}
-.cross-tools button{border:1px solid var(--line);background:var(--paper);border-radius:6px;padding:6px 9px;font-size:14px}
-.cross-links{font-size:14px}
-@media(max-width:660px){.cross-demo{grid-template-columns:1fr;gap:12px}.cross-demo video{width:min(100%,330px)}}
 </style>
 </head>
 <body>
 <div class="bar"><div class="wrap"><div class="identity"><span class="mark">R³</span> SafeLIBERO</div><nav class="links" aria-label="Project resources"><a href="https://github.com/brandon-lee-bo/vlsa-aegis">GitHub</a><a href="https://github.com/brandon-lee-bo/vlsa-aegis/blob/main/docs/level-iii.md">Run Level III</a></nav></div></div>
 <main class="wrap" id="level-iii">
 <header><h1>Obstacle benchmark</h1><p>Explore 16 manipulation tasks across four LIBERO suites. Compare the original static obstacles with moving obstacles in Level III.</p></header>
-<section class="cross-demo" id="crossing-demo" aria-labelledby="cross-title">
-<div>
-<h2 id="cross-title">Watch the bottle cross the reach path</h2>
-<p>The yellow dashes connect the fixed gripper to the black bowl. When the bottle intersects this reference line in 3D, a yellow ring marks the crossing point. The clip plays at half speed.</p>
-<ul class="cross-legend"><li><i aria-hidden="true"></i>Estimated gripper-to-bowl path</li><li><i aria-hidden="true"></i>Bottle motion</li><li><i aria-hidden="true"></i>3D intersection</li></ul>
-<div class="cross-tools" aria-label="Inspect a moment"><button type="button" data-moment="1.8">Before</button><button type="button" data-moment="2.8">At crossing</button><button type="button" data-moment="4.2">After</button></div>
-<div class="cross-links"><a href="https://github.com/brandon-lee-bo/R3-Robust-Real-time-Robotics/tree/main/benchmarks/phase1_1/through">Scene and geometry checks</a> · <a href="#task-explorer">Browse all tasks</a></div>
-</div>
-<video id="cross-clip" preload="metadata" controls muted loop playsinline aria-label="A moving bottle intersects the yellow dashed reference path" poster="benchmark_figs/crossing-demo/crossing.webp" >
-<source src="benchmark_figs/crossing-demo/spatial.mp4" type="video/mp4">
-<source src="benchmark_figs/crossing-demo/spatial.webm" type="video/webm">
-<a href="benchmark_figs/crossing-demo/spatial.mp4">Download crossing demo</a>
-</video>
-</section>
 <div class="suite-row" id="task-explorer">
 <div class="switch" id="suites" role="group" aria-label="Task suite">
 <button data-key="spatial" aria-pressed="true">Spatial</button><button data-key="object" aria-pressed="false">Object</button><button data-key="goal" aria-pressed="false">Goal</button><button data-key="long" aria-pressed="false">Long</button>
@@ -93,13 +66,14 @@ footer{margin:22px 0 30px;color:var(--muted);font-size:14px}
 </div>
 <section class="explorer" aria-label="Task explorer">
 <figure class="camera">
-<div class="stage"><img id="scene" src="benchmark_figs/level-iii/spatial-0-10.webp" alt="Spatial task preview"></div>
-<figcaption class="camera-caption"><span id="caption">Yellow ring marks the moving obstacle.</span><button id="motion" type="button">Show still frame</button></figcaption>
+<div class="stage"><img id="scene" src="benchmark_figs/level-iii-task-path/spatial-0-10.webp" alt="Spatial task preview"></div>
+<figcaption class="camera-caption"><span id="caption">Yellow dashes trace the task. Cyan traces the obstacle.</span><button id="motion" type="button">Show crossing frame</button></figcaption>
 </figure>
 <div class="side">
 <div class="view-head" id="selection">Spatial / Level III</div>
 <h2 id="level-name">Moving obstacle</h2>
-<p id="description" class="trial">The arm holds position. After 0.6 s, the obstacle travels 16 cm in a straight line and stops.</p>
+<p id="description" class="trial">The arm holds its start pose while the obstacle crosses the estimated task route. The yellow ring marks the 3D crossing.</p>
+<p class="trial" id="route" style="margin-top:10px"></p>
 <div id="speed-row" class="control-row"><span>Obstacle speed</span><div class="switch" id="speeds" role="group" aria-label="Obstacle speed"><button data-key="10" aria-pressed="true">10 cm/s</button><button data-key="20" aria-pressed="false">20 cm/s</button></div></div>
 <h3 class="task-label">Select a task</h3>
 <div id="tasks" class="tasks" role="group" aria-label="Tasks"></div>
@@ -149,19 +123,23 @@ footer{margin:22px 0 30px;color:var(--muted);font-size:14px}
     "III": [
       {
         "name": "Pick up the black bowl between the plate and the ramekin and place it on the plate",
-        "path": "benchmark_figs/level-iii/spatial-0"
+        "path": "benchmark_figs/level-iii-task-path/spatial-0",
+        "route": "Gripper → Bowl → Plate"
       },
       {
         "name": "Pick up the black bowl on the ramekin and place it on the plate",
-        "path": "benchmark_figs/level-iii/spatial-1"
+        "path": "benchmark_figs/level-iii-task-path/spatial-1",
+        "route": "Gripper → Bowl → Plate"
       },
       {
         "name": "Pick up the black bowl on the stove and place it on the plate",
-        "path": "benchmark_figs/level-iii/spatial-2"
+        "path": "benchmark_figs/level-iii-task-path/spatial-2",
+        "route": "Gripper → Bowl → Plate"
       },
       {
         "name": "Pick up the black bowl on the wooden cabinet and place it on the plate",
-        "path": "benchmark_figs/level-iii/spatial-3"
+        "path": "benchmark_figs/level-iii-task-path/spatial-3",
+        "route": "Gripper → Bowl → Plate"
       }
     ]
   },
@@ -205,19 +183,23 @@ footer{margin:22px 0 30px;color:var(--muted);font-size:14px}
     "III": [
       {
         "name": "Put the bowl on the plate",
-        "path": "benchmark_figs/level-iii/goal-0"
+        "path": "benchmark_figs/level-iii-task-path/goal-0",
+        "route": "Gripper → Bowl → Lift and carry → Plate"
       },
       {
         "name": "Put the bowl on the stove",
-        "path": "benchmark_figs/level-iii/goal-2"
+        "path": "benchmark_figs/level-iii-task-path/goal-2",
+        "route": "Gripper → Bowl → Stove"
       },
       {
         "name": "Put the bowl on top of the cabinet",
-        "path": "benchmark_figs/level-iii/goal-1"
+        "path": "benchmark_figs/level-iii-task-path/goal-1",
+        "route": "Gripper → Bowl → Lift and carry → Cabinet top"
       },
       {
         "name": "Open the top drawer and put the bowl inside",
-        "path": "benchmark_figs/level-iii/goal-3"
+        "path": "benchmark_figs/level-iii-task-path/goal-3",
+        "route": "Gripper → Drawer handle → Pull open → Bowl → Open drawer"
       }
     ]
   },
@@ -261,19 +243,23 @@ footer{margin:22px 0 30px;color:var(--muted);font-size:14px}
     "III": [
       {
         "name": "Pick up the bbq sauce and place it in the basket",
-        "path": "benchmark_figs/level-iii/object-3"
+        "path": "benchmark_figs/level-iii-task-path/object-3",
+        "route": "Gripper → Bbq sauce → Basket"
       },
       {
         "name": "Pick up the chocolate pudding and place it in the basket",
-        "path": "benchmark_figs/level-iii/object-1"
+        "path": "benchmark_figs/level-iii-task-path/object-1",
+        "route": "Gripper → Chocolate pudding → Basket"
       },
       {
         "name": "Pick up the milk and place it in the basket",
-        "path": "benchmark_figs/level-iii/object-2"
+        "path": "benchmark_figs/level-iii-task-path/object-2",
+        "route": "Gripper → Milk → Basket"
       },
       {
         "name": "Pick up the orange juice and place it in the basket",
-        "path": "benchmark_figs/level-iii/object-0"
+        "path": "benchmark_figs/level-iii-task-path/object-0",
+        "route": "Gripper → Orange juice → Basket"
       }
     ]
   },
@@ -317,19 +303,23 @@ footer{margin:22px 0 30px;color:var(--muted);font-size:14px}
     "III": [
       {
         "name": "Put both the alphabet soup and the cream cheese box in the basket",
-        "path": "benchmark_figs/level-iii/long-0"
+        "path": "benchmark_figs/level-iii-task-path/long-0",
+        "route": "Gripper → Alphabet soup → Basket → Cream cheese → Basket"
       },
       {
         "name": "Put both the alphabet soup and the tomato sauce in the basket",
-        "path": "benchmark_figs/level-iii/long-1"
+        "path": "benchmark_figs/level-iii-task-path/long-1",
+        "route": "Gripper → Alphabet soup → Basket → Tomato sauce → Basket"
       },
       {
         "name": "Put the white mug on the left plate and put the yellow and white mug on the right plate",
-        "path": "benchmark_figs/level-iii/long-2"
+        "path": "benchmark_figs/level-iii-task-path/long-2",
+        "route": "Gripper → White mug → Left plate → Two-tone mug → Right plate"
       },
       {
         "name": "Put the white mug on the plate and put the chocolate pudding to the right of the plate",
-        "path": "benchmark_figs/level-iii/long-3"
+        "path": "benchmark_figs/level-iii-task-path/long-3",
+        "route": "Gripper → White mug → Plate → Chocolate pudding → Right of plate"
       }
     ]
   }
@@ -340,7 +330,7 @@ const byId = id => document.getElementById(id);
 const levels = {
   I: ['Near the target', 'The obstacle starts close to the object the robot must manipulate.'],
   II: ['On the movement path', 'The obstacle is placed along the expected movement path.'],
-  III: ['Moving obstacle', 'The arm holds position. After 0.6 s, the obstacle travels 16 cm in a straight line and stops.']
+  III: ['Moving obstacle', 'The arm holds its start pose while the obstacle crosses the estimated task route. The yellow ring marks the 3D crossing.']
 };
 const state = {suite:'spatial', level:'III', task:0, speed:'10', animate:!matchMedia('(prefers-reduced-motion: reduce)').matches};
 function mark(group, value) {
@@ -353,9 +343,11 @@ function render() {
   byId('selection').textContent = state.suite[0].toUpperCase() + state.suite.slice(1) + ' / Level ' + state.level;
   byId('level-name').textContent = levels[state.level][0];
   byId('description').textContent = levels[state.level][1];
+  byId('route').hidden = !moving;
+  byId('route').textContent = moving ? row.route : '';
   byId('speed-row').hidden = !moving; byId('motion').hidden = !moving;
-  byId('motion').textContent = state.animate ? 'Show still frame' : 'Play animation';
-  byId('caption').textContent = moving ? 'Yellow ring marks the moving obstacle.' : 'Original SafeLIBERO scene.';
+  byId('motion').textContent = state.animate ? 'Show crossing frame' : 'Play animation';
+  byId('caption').textContent = moving ? 'Yellow dashes trace the task. Cyan traces the obstacle.' : 'Original SafeLIBERO scene.';
   const scene = byId('scene');
   const src = moving ? row.path + '-' + state.speed + (state.animate ? '.gif' : '.webp') : row.path;
   scene.alt = 'Level ' + state.level + '. ' + row.name;
@@ -391,23 +383,6 @@ byId('motion').addEventListener('click', () => {state.animate=!state.animate; re
 window.addEventListener('hashchange', () => {readHash(); render();});
 readHash(); render();
 
-const clip = byId('cross-clip');
-let pendingMoment = null;
-function seekCrossing() {
-  if (pendingMoment !== null && clip.readyState >= 1) {
-    clip.currentTime = pendingMoment;
-    pendingMoment = null;
-  }
-}
-clip.addEventListener('loadedmetadata', seekCrossing);
-for (const button of document.querySelectorAll('[data-moment]')) {
-  button.addEventListener('click', () => {
-    clip.pause();
-    pendingMoment = Number(button.dataset.moment);
-    seekCrossing();
-  });
-}
-if (!matchMedia('(prefers-reduced-motion: reduce)').matches) clip.play().catch(() => {});
 </script>
 </body>
 </html>
